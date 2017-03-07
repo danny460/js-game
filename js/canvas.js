@@ -32,6 +32,7 @@ function canvasApp(){
 	function updateCircle(x, y) {
 		player.centerX = x;
 		player.centerY = y;
+		player.radius += 0.1;
 		drawCirle(player);
 	}
 
