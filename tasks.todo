@@ -1,0 +1,6 @@
+js-game todo:
+	test three.js:
+		☐ simple 3d scene
+		☐ camera follow
+		☐ character with movement control
+		☐ character with weapon control

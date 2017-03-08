@@ -1,8 +1,3 @@
-##System Generated Files
 .DS_Store
-
-##Packages
 /node_modules
-
-##Other
 server.js
