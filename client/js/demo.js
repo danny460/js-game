@@ -72,9 +72,12 @@
 
 	function onMouseDown(e){
 		render.domElement.addEventListener("mousemove", onMouseMove);
-
+		lastX = e.clientX;
+		lastY = e.clientY;
 	}
 	function onMouseMove(e){
+		var dx = e.clientX - lastX;
+		var dy = e.clientY - lastY;
 		
 	}
 	function onMouseUp(e){
