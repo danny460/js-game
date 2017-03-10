@@ -1,8 +1,8 @@
 js-game todo:
 	test three.js:
-		☐ simple 3d map
 		✔ create world reference @done (3/9/2017, 11:21:35 PM)
-		☐ camera rotate with mouse movement
+		✔ camera rotate with mouse movement @done (3/10/2017, 2:49:56 PM)
+		☐ simple 3d map
 	game:	
 		☐ character with movement control
 		☐ camera follow
