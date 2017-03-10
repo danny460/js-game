@@ -47,6 +47,7 @@
 		pointLight.shadow.mapSize.height = 2048; // default
 		pointLight.shadow.camera.near = 0.5;       // default
 		pointLight.shadow.camera.far = 500      // default
+		pointLight.
 		scene.add(pointLight);
 		var basePlaneGeometry = new three.PlaneGeometry(100, 50);
 		var basePlane = new three.Mesh(basePlaneGeometry, material.basePlaneMaterial);
