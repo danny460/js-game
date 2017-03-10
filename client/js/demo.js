@@ -1,12 +1,12 @@
 (function(){
 	var three = THREE;
 	var stats = new Stats();
-	var scene, camera, renderer;
+	var scene, camera, renderer, controls;
 	var lastX,lastY;
 	showStats();
 	init();
 	attachEventListner();
-	render();
+	animate();
 	
 	function showStats(){
 		stats.showPanel( 0 );
@@ -24,7 +24,7 @@
 		camera.position.y = 0;
 		camera.position.z = 20;
 		camera.lookAt(scene.position);
-		
+
 		document.body.appendChild(renderer.domElement);
 		initMap();
 		showAxis(5000);
@@ -69,17 +69,34 @@
 		scene.add(basePlane);
 	}
 
-	function render() {
+	function animate() {
 		stats.begin();
-		renderer.render( scene, camera );
+		render();
 		stats.end();
-		requestAnimationFrame( render );
+		requestAnimationFrame( animate );
+	}
+
+	
+
+	function render(){
+		renderer.render( scene, camera );
 	}
 
 	function attachEventListner(){
+		window.addEventListener("resize", onWindowResize);
 		renderer.domElement.addEventListener("mousedown", onMouseDown);
+		renderer.domElement.addEventListener("mouseup", onMouseUp);
 		renderer.domElement.addEventListener("mousewheel", onScroll);
 	}
+
+	function onWindowResize() {
+		camera.aspect = innerWidth / innerHeight;
+		camera.updateProjectionMatrix();
+		renderer.setSize( innerWidth, innerHeight );
+		console.log("resized");
+	}
+
+
 
 	function onMouseDown(e){
 		e.preventDefault();
@@ -92,10 +109,20 @@
 		var dx = e.clientX - lastX;
 		var dy = e.clientY - lastY;
 		lastX = e.clientX;
-		var angle = dx * 0.5 * 2 * Math.Pi / 360;
-		rotate()
-		function rotate(angle, center){
-			//TODO
+		lastY = e.clientY;
+		rotateAboutY(dx, scene.position);
+		camera.position.y += dy;
+		camera.lookAt(scene.position);
+
+		function rotateAboutY(dx, target){
+			target || (target = scene.position);
+			var px = camera.position.x;
+			var pz = camera.position.z;
+			var magnitude = Math.sqrt(px * px + pz * pz);
+			var angle = Math.atan2(pz, px) + dx * 2 * Math.PI / 360;
+			camera.position.z = magnitude * Math.sin(angle);
+			camera.position.x = magnitude * Math.cos(angle);
+			camera.lookAt(target);
 		}
 	}
 	function onMouseUp(e){
@@ -103,7 +130,12 @@
 		renderer.domElement.removeEventListener("mousemove", onMouseMove);
 	}
 	function onScroll(e){
-
+		e.preventDefault();
+		var factor = e.wheelDelta > 0 ? 0.99 : 1.01;
+		camera.position.x *= factor;
+		camera.position.y *= factor;
+		camera.position.z *= factor;
+		camera.lookAt(scene.position);
 	}
 
 })();
