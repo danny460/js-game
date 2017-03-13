@@ -7,12 +7,11 @@
 	init();
 	attachEventListner();
 	animate();
-	
+	//	
 	function showStats(){
 		stats.showPanel( 0 );
 		document.body.appendChild( stats.dom );
 	}
-
 	function init(){
 		renderer = new three.WebGLRenderer();
 		renderer.setClearColor(0xEEEEEE, 1.);
@@ -29,7 +28,6 @@
 		initMap();
 		initPlayer();
 	}
-
 	function initMap(){
 		const DEG_2_RAD = 2 * Math.PI / 360;
 		//basis
@@ -81,7 +79,6 @@
 			}
 		}
 	}
-
 	function initPlayer(){
 		var playerGeo = new three.BoxGeometry(3,10,3); 
 		var playerMat = new three.MeshLambertMaterial({color: 0xff0000})
@@ -89,7 +86,6 @@
 		playerCamera = new three.PerspectiveCamera();
 
 	}
-
 	function animate() {
 		stats.begin();
 		render();
