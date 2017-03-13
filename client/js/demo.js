@@ -1,7 +1,7 @@
 (function(){
 	var three = THREE;
 	var stats = new Stats();
-	var scene, camera, renderer, controls;
+	var scene, renderer, controls, player, playerCamera, sceneCamera;
 	var lastX,lastY;
 	showStats();
 	init();
@@ -21,13 +21,13 @@
 		renderer.shadowMap.enabled = true;
 		renderer.shadowMap.type = three.PCFSoftShadowMap;
 		scene = new three.Scene();
-		camera = new three.PerspectiveCamera( 75, innerWidth / innerHeight, 0.1, 1000 );		
-		camera.position.set(50, 50, 50);
-		camera.lookAt(scene.position);
-
+		sceneCamera = new three.PerspectiveCamera( 75, innerWidth / innerHeight, 0.1, 1000 );		
+		sceneCamera.position.set(50, 50, 50);
+		sceneCamera.lookAt(scene.position);
 		document.body.appendChild(renderer.domElement);
-		initMap();
 		showAxis(10000);
+		initMap();
+		initPlayer();
 	}
 
 	function initMap(){
@@ -47,7 +47,6 @@
 		pointLight.shadow.mapSize.height = 2048; // default
 		pointLight.shadow.camera.near = 0.5;       // default
 		pointLight.shadow.camera.far = 500      // default
-		pointLight.
 		scene.add(pointLight);
 		var basePlaneGeometry = new three.PlaneGeometry(100, 50);
 		var basePlane = new three.Mesh(basePlaneGeometry, material.basePlaneMaterial);
@@ -83,6 +82,14 @@
 		}
 	}
 
+	function initPlayer(){
+		var playerGeo = new three.BoxGeometry(3,10,3); 
+		var playerMat = new three.MeshLambertMaterial({color: 0xff0000})
+		player = new three.Mesh(playerGeo, playerMat);
+		playerCamera = new three.PerspectiveCamera();
+
+	}
+
 	function animate() {
 		stats.begin();
 		render();
@@ -90,7 +97,7 @@
 		requestAnimationFrame( animate );
 	}
 	function render(){
-		renderer.render( scene, camera );
+		renderer.render( scene, sceneCamera );
 	}
 	//Camera Control and Reference
 	function showAxis(length){
@@ -117,8 +124,8 @@
 		renderer.domElement.addEventListener("mousewheel", onScroll);
 	}
 	function onWindowResize() {
-		camera.aspect = innerWidth / innerHeight;
-		camera.updateProjectionMatrix();
+		sceneCamera.aspect = innerWidth / innerHeight;
+		sceneCamera.updateProjectionMatrix();
 		renderer.setSize( innerWidth, innerHeight );
 		console.log("resized");
 	}
@@ -135,18 +142,18 @@
 		lastX = e.clientX;
 		lastY = e.clientY;
 		rotateAboutY(dx, scene.position);
-		camera.position.y += dy;
-		camera.lookAt(scene.position);
+		sceneCamera.position.y += dy;
+		sceneCamera.lookAt(scene.position);
 
 		function rotateAboutY(dx, target){
 			target || (target = scene.position);
-			var px = camera.position.x;
-			var pz = camera.position.z;
+			var px = sceneCamera.position.x;
+			var pz = sceneCamera.position.z;
 			var magnitude = Math.sqrt(px * px + pz * pz);
 			var angle = Math.atan2(pz, px) + dx * 2 * Math.PI / 360;
-			camera.position.z = magnitude * Math.sin(angle);
-			camera.position.x = magnitude * Math.cos(angle);
-			camera.lookAt(target);
+			sceneCamera.position.z = magnitude * Math.sin(angle);
+			sceneCamera.position.x = magnitude * Math.cos(angle);
+			sceneCamera.lookAt(target);
 		}
 	}
 	function onMouseUp(e){
@@ -157,10 +164,10 @@
 		e.preventDefault();
 		var factor = 0.05;
 		factor = 1 + (e.wheelDelta > 0 ? -factor : factor);
-		camera.position.x *= factor;
-		camera.position.y *= factor;
-		camera.position.z *= factor;
-		camera.lookAt(scene.position);
+		sceneCamera.position.x *= factor;
+		sceneCamera.position.y *= factor;
+		sceneCamera.position.z *= factor;
+		sceneCamera.lookAt(scene.position);
 	}
 
 })();
